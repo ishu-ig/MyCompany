@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'aos/dist/aos.css';
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
+}
+
+/* Swiper custom pagination styling */
+.swiper-pagination-bullet {
+  @apply bg-slate-300 opacity-70 transition-all duration-300;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-indigo-600 opacity-100 scale-125 w-6 rounded-full !important;
+}
