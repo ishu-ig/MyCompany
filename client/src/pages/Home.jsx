@@ -26,7 +26,7 @@ import { setSelectedTrack } from '../redux/slices/courseSlice';
 const stats = [
   { value: '100%', label: 'Practical Role Simulations', icon: BookOpen, change: 'Live Corporate Drills' },
   { value: '1:1', label: 'Dedicated Career Mentorship', icon: Users, change: 'Personalized Coaching' },
-  { value: '14 Days', label: 'Fast-Track Time-to-Deploy', icon: Zap, change: 'Agile & Day-1 Ready' },
+  { value: '45 Days', label: 'Fast-Track Time-to-Deploy', icon: Zap, change: 'Agile & Day-1 Ready' },
   { value: '100%', label: 'Verifiable Digital Credentials', icon: Award, change: 'Instant QR Validation' },
 ];
 
@@ -503,7 +503,7 @@ export default function Home() {
                   <div>
                     <div className="flex justify-between text-xs font-bold mb-1 text-slate-700">
                       <span>CareerPlacify Train-and-Hire</span>
-                      <span className="text-emerald-600 font-black">14 Days (Zero Ramp-Up)</span>
+                      <span className="text-emerald-600 font-black">45 Days (Zero Ramp-Up)</span>
                     </div>
                     <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
                       <div className="bg-emerald-500 h-full w-[25%]" />

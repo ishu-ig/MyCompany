@@ -182,7 +182,9 @@ const sendCertificateIssuedEmail = async ({
   return sendEmail({ to: candidateEmail, subject, html });
 };
 
-// 6. Contact Form Confirmation
+const ADMIN_NOTIFY_EMAIL = process.env.ADMIN_NOTIFY_EMAIL || 'careerplacify@gmail.com';
+
+// 6. Contact Form Confirmation (to applicant)
 const sendContactInquiryConfirmation = async ({ name, email, service }) => {
   const subject = `Inquiry Received - CareerPlacify Team`;
   const html = `
@@ -199,6 +201,88 @@ const sendContactInquiryConfirmation = async ({ name, email, service }) => {
   return sendEmail({ to: email, subject, html });
 };
 
+// 7. Contact Form Admin Alert (Sent directly to careerplacify@gmail.com)
+const sendContactInquiryAdminAlert = async ({
+  name,
+  email,
+  phone,
+  organization,
+  roleType,
+  service,
+  subject,
+  message,
+}) => {
+  const emailSubject = `🔥 New Lead Inquiry: ${name} (${organization || service || 'General'})`;
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+      <div style="border-bottom: 2px solid #4f46e5; padding-bottom: 12px; margin-bottom: 20px;">
+        <h2 style="color: #1e1b4b; margin: 0;">New Website Inquiry 📥</h2>
+        <p style="color: #64748b; font-size: 13px; margin: 4px 0 0;">Received via CareerPlacify Contact Form</p>
+      </div>
+      
+      <div style="background-color: #f8fafc; padding: 18px; border-radius: 10px; margin-bottom: 20px;">
+        <table style="width: 100%; font-size: 14px; line-height: 1.8; color: #334155;">
+          <tr><td style="width: 150px; font-weight: bold; color: #64748b;">Full Name:</td><td><strong>${name}</strong></td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">Email Address:</td><td><a href="mailto:${email}" style="color: #4f46e5; font-weight: bold;">${email}</a></td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">Phone Number:</td><td>${phone || 'Not provided'}</td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">Organization / College:</td><td>${organization || 'Not provided'}</td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">User Type:</td><td><span style="background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">${roleType || 'Corporate / General'}</span></td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">Service / Interest:</td><td>${service || 'General Inquiry'}</td></tr>
+        </table>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h3 style="color: #1e293b; font-size: 15px; margin-bottom: 8px;">Message / Requirements:</h3>
+        <div style="background-color: #f1f5f9; padding: 16px; border-radius: 8px; color: #1e293b; font-size: 14px; line-height: 1.6; white-space: pre-line; border-left: 4px solid #4f46e5;">
+          ${message}
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+        <a href="mailto:${email}?subject=Re: CareerPlacify Inquiry - ${encodeURIComponent(name)}" style="background-color: #4f46e5; color: #ffffff; padding: 10px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 13px;">Reply to Lead Directly</a>
+      </div>
+    </div>
+  `;
+  return sendEmail({ to: ADMIN_NOTIFY_EMAIL, subject: emailSubject, html });
+};
+
+// 8. Application Admin Alert (Sent directly to careerplacify@gmail.com)
+const sendApplicationAdminAlert = async ({
+  applicantName,
+  applicantEmail,
+  phone,
+  highestEducation,
+  targetTrack,
+  resumeLink,
+  type = 'Bootcamp',
+}) => {
+  const emailSubject = `🎓 New ${type} Application: ${applicantName} (${targetTrack})`;
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+      <div style="border-bottom: 2px solid #06b6d4; padding-bottom: 12px; margin-bottom: 20px;">
+        <h2 style="color: #1e1b4b; margin: 0;">New Candidate Application 🎓</h2>
+        <p style="color: #64748b; font-size: 13px; margin: 4px 0 0;">Received via CareerPlacify Candidate Portal</p>
+      </div>
+
+      <div style="background-color: #f8fafc; padding: 18px; border-radius: 10px; margin-bottom: 20px;">
+        <table style="width: 100%; font-size: 14px; line-height: 1.8; color: #334155;">
+          <tr><td style="width: 150px; font-weight: bold; color: #64748b;">Candidate Name:</td><td><strong>${applicantName}</strong></td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">Email:</td><td><a href="mailto:${applicantEmail}" style="color: #06b6d4; font-weight: bold;">${applicantEmail}</a></td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">Phone:</td><td>${phone || 'Not provided'}</td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">Highest Education:</td><td>${highestEducation || 'Graduate'}</td></tr>
+          <tr><td style="font-weight: bold; color: #64748b;">Target Track:</td><td><span style="background: #cffafe; color: #155e75; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">${targetTrack}</span></td></tr>
+          ${resumeLink ? `<tr><td style="font-weight: bold; color: #64748b;">Resume Link:</td><td><a href="${resumeLink}" target="_blank" style="color: #4f46e5; font-weight: bold;">View Resume ↗</a></td></tr>` : ''}
+        </table>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+        <a href="mailto:${applicantEmail}?subject=CareerPlacify Bootcamp Application - ${encodeURIComponent(applicantName)}" style="background-color: #06b6d4; color: #ffffff; padding: 10px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 13px;">Contact Candidate</a>
+      </div>
+    </div>
+  `;
+  return sendEmail({ to: ADMIN_NOTIFY_EMAIL, subject: emailSubject, html });
+};
+
 module.exports = {
   getResendClient,
   sendEmail,
@@ -208,4 +292,6 @@ module.exports = {
   sendInterviewScheduledEmail,
   sendCertificateIssuedEmail,
   sendContactInquiryConfirmation,
+  sendContactInquiryAdminAlert,
+  sendApplicationAdminAlert,
 };

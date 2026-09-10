@@ -1,6 +1,6 @@
 const ContactEnquiry = require('../models/ContactEnquiry');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
-const { sendContactInquiryConfirmation } = require('../utils/mailer');
+const { sendContactInquiryConfirmation, sendContactInquiryAdminAlert } = require('../utils/mailer');
 
 // @desc    Submit a contact enquiry
 // @route   POST /api/contact
@@ -27,7 +27,19 @@ const submitContact = async (req, res, next) => {
       message,
     });
 
-    // Asynchronously dispatch Resend email confirmation
+    // 1. Send Alert to Admin/Platform Email (careerplacify@gmail.com)
+    sendContactInquiryAdminAlert({
+      name,
+      email,
+      phone,
+      organization,
+      roleType: determinedUserType,
+      service: service || 'Train-and-Hire Consultation',
+      subject: determinedSubject,
+      message,
+    }).catch((err) => console.error('Admin inquiry alert email error:', err));
+
+    // 2. Try to dispatch confirmation email to applicant
     sendContactInquiryConfirmation({ name, email, service: service || 'Train-and-Hire Consultation' }).catch(
       (err) => console.error('Contact confirmation email error:', err)
     );

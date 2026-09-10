@@ -4,7 +4,7 @@ const User = require('../models/User');
 const CandidateProfile = require('../models/CandidateProfile');
 const Notification = require('../models/Notification');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
-const { sendApplicationReceivedEmail } = require('../utils/mailer');
+const { sendApplicationReceivedEmail, sendApplicationAdminAlert } = require('../utils/mailer');
 
 // @desc    Candidate Bootcamp Application / Registration (Public from client)
 // @route   POST /api/applications/bootcamp
@@ -84,12 +84,24 @@ const applyBootcampCandidate = async (req, res, next) => {
       relatedId: application._id.toString(),
     });
 
+    // Send Alert to Admin/Platform Email (careerplacify@gmail.com)
+    sendApplicationAdminAlert({
+      applicantName,
+      applicantEmail: email,
+      phone,
+      highestEducation,
+      targetTrack: targetTrack || 'Business Development Executive',
+      resumeLink,
+      type: 'Bootcamp',
+    }).catch((err) => console.error('Admin application alert error:', err));
+
+    // Send confirmation to candidate
     sendApplicationReceivedEmail({
       applicantName,
       applicantEmail: email,
       jobTitle: targetTrack || matchingJob?.title || 'Bootcamp Track',
       companyName: 'CareerPlacify Academy',
-    }).catch((err) => console.error('Bootcamp email error:', err));
+    }).catch((err) => console.error('Bootcamp candidate email error:', err));
 
     return sendSuccess(
       res,

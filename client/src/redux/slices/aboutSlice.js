@@ -37,7 +37,7 @@ const initialState = {
   ],
   metrics: [
     { label: 'Practical Role Training', value: '100%' },
-    { label: 'Fast-Track Readiness', value: '14 Days' },
+    { label: 'Fast-Track Readiness', value: '45 Days' },
     { label: 'Dedicated Mentorship', value: '1:1' },
     { label: 'Verifiable Credentials', value: '100%' },
   ],
