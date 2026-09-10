@@ -4,7 +4,8 @@ export const submitInquiry = createAsyncThunk(
   'contact/submitInquiry',
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await fetch('http://localhost:5001/api/contact', {
+      const backendUrl = process.env.REACT_APP_BACKEND_SERVER || 'http://localhost:8000';
+      const res = await fetch(`${backendUrl}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

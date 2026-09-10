@@ -3,28 +3,65 @@ const CourseEnrollment = require('../models/CourseEnrollment');
 const TrainingCourse = require('../models/TrainingCourse');
 const Notification = require('../models/Notification');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
+const { sendCertificateIssuedEmail } = require('../utils/mailer');
 
 const generateVerificationCode = () => {
   return 'CERT-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Date.now().toString().slice(-4);
 };
+
+const User = require('../models/User');
 
 // @desc    Generate / Issue Certificate
 // @route   POST /api/certificates
 // @access  Private (Trainer/Admin)
 const issueCertificate = async (req, res, next) => {
   try {
-    const { candidateId, courseId, grade = 'First Class', certificateUrl } = req.body;
+    const {
+      candidateId,
+      courseId,
+      candidateName,
+      candidateEmail,
+      courseTitle,
+      certificateNumber,
+      verificationCode: customCode,
+      grade = 'First Class',
+      certificateUrl,
+    } = req.body;
 
-    if (!candidateId || !courseId) {
-      return sendError(res, 'Candidate ID and Course ID are required', 400);
+    let targetCandidateId = candidateId;
+    let targetCourseId = courseId;
+
+    if (!targetCandidateId && candidateEmail) {
+      let user = await User.findOne({ email: candidateEmail });
+      if (!user) {
+        user = await User.create({
+          name: candidateName || 'Certified Candidate',
+          email: candidateEmail,
+          password: 'Password123!',
+          role: 'candidate',
+        });
+      }
+      targetCandidateId = user._id;
+    } else if (!targetCandidateId) {
+      const defaultUser = await User.findOne({ role: 'candidate' });
+      targetCandidateId = defaultUser ? defaultUser._id : req.user._id;
     }
 
-    const verificationCode = generateVerificationCode();
-    const certNumber = `TRN-${Date.now().toString().slice(-6)}`;
+    if (!targetCourseId && courseTitle) {
+      const course = await TrainingCourse.findOne({ title: { $regex: courseTitle, $options: 'i' } });
+      if (course) targetCourseId = course._id;
+    }
+    if (!targetCourseId) {
+      const firstCourse = await TrainingCourse.findOne();
+      if (firstCourse) targetCourseId = firstCourse._id;
+    }
+
+    const verificationCode = customCode || generateVerificationCode();
+    const certNumber = certificateNumber || `TRN-${Date.now().toString().slice(-6)}`;
 
     const certificate = await Certificate.create({
-      candidate: candidateId,
-      course: courseId,
+      candidate: targetCandidateId,
+      course: targetCourseId,
       certificateNumber: certNumber,
       verificationCode,
       grade,
@@ -32,22 +69,35 @@ const issueCertificate = async (req, res, next) => {
       issueDate: new Date(),
     });
 
-    // Update enrollment
-    await CourseEnrollment.findOneAndUpdate(
-      { candidate: candidateId, course: courseId },
-      { certificateUrl: certificate.certificateUrl, courseStatus: 'completed', progress: 100 }
-    );
+    if (targetCandidateId && targetCourseId) {
+      await CourseEnrollment.findOneAndUpdate(
+        { candidate: targetCandidateId, course: targetCourseId },
+        { certificateUrl: certificate.certificateUrl, courseStatus: 'completed', progress: 100 }
+      );
+    }
 
-    const course = await TrainingCourse.findById(courseId);
+    const course = targetCourseId ? await TrainingCourse.findById(targetCourseId) : null;
+    const targetUser = targetCandidateId ? await User.findById(targetCandidateId) : null;
 
-    // Send notification
-    await Notification.create({
-      user: candidateId,
-      title: 'Certificate Issued! 🎓',
-      message: `Congratulations! Your certificate for ${course?.title || 'Training Program'} is ready to download and verify.`,
-      type: 'certificate',
-      relatedId: certificate._id.toString(),
-    });
+    if (targetCandidateId) {
+      await Notification.create({
+        user: targetCandidateId,
+        title: 'Certificate Issued! 🎓',
+        message: `Congratulations! Your certificate for ${course?.title || 'Training Program'} is ready to download and verify.`,
+        type: 'certificate',
+        relatedId: certificate._id.toString(),
+      });
+
+      if (targetUser && targetUser.email) {
+        sendCertificateIssuedEmail({
+          candidateName: targetUser.name,
+          candidateEmail: targetUser.email,
+          courseTitle: course?.title || 'Training Program',
+          certificateNumber: certificate.certificateNumber,
+          verificationCode: certificate.verificationCode,
+        }).catch((err) => console.error('Certificate email error:', err));
+      }
+    }
 
     return sendSuccess(res, 'Certificate issued successfully', certificate, 201);
   } catch (error) {

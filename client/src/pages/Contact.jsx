@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Send, ChevronDown, ChevronUp } from 'lucide-react';
+import { Send, ChevronDown, ChevronUp, Mail } from 'lucide-react';
 import PageHeader from '../components/common/PageHeader';
 import {
   updateContactField,
@@ -41,7 +41,7 @@ export default function Contact() {
     <div className="space-y-16 pb-20">
       <PageHeader
         badge="Connect & Collaborate"
-        title="Partner With TalentNestro"
+        title="Partner With CareerPlacify"
         description="Whether you are an enterprise seeking skilled talent or a college planning placement drives, let's build your solution."
       />
 
@@ -156,8 +156,28 @@ export default function Contact() {
             )}
           </div>
 
-          {/* Right Column: FAQs Accordion */}
+          {/* Right Column: Direct Contact & FAQs Accordion */}
           <div className="space-y-6" data-aos="fade-left">
+            {/* Direct Email Card */}
+            <div className="bg-gradient-to-br from-indigo-900 to-slate-900 p-6 rounded-3xl text-white shadow-sm border border-indigo-800/50">
+              <div className="flex items-center gap-3.5 mb-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-600/40 border border-indigo-400/30 flex items-center justify-center text-indigo-300">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-white">Direct Email Support</h3>
+                  <p className="text-xs text-slate-300">Reach our team directly for inquiries & partnerships</p>
+                </div>
+              </div>
+              <a
+                href="mailto:careerplacify@gmail.com"
+                className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-indigo-200 hover:text-white transition bg-slate-800/70 hover:bg-slate-800 py-2.5 px-4 rounded-xl border border-slate-700/60"
+              >
+                <Mail className="w-4 h-4 text-indigo-400" />
+                careerplacify@gmail.com
+              </a>
+            </div>
+
             <div>
               <h2 className="text-2xl font-bold text-slate-900 mb-2">Strategic FAQs</h2>
               <p className="text-xs text-slate-500">Common questions from enterprise hiring partners and colleges.</p>

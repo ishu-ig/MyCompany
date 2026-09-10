@@ -9,7 +9,7 @@ export default function Home() {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/admin/dashboard`,
+          `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/admin/dashboard`,
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",

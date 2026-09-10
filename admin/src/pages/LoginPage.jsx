@@ -59,57 +59,51 @@ export default function LoginPage() {
     setData((old) => ({ ...old, [name]: value }));
   }
 
-  // ── From file 1: postData logic (Admin / Super Admin roles) ──────────────────
+  // ── Admin Login logic against Backend API ──────────────────
   async function handleSubmit(e) {
     e.preventDefault();
     setValidated(true);
     if (!e.target.checkValidity()) return;
 
     setLoading(true);
+    setError("");
     try {
+      const backendUrl = process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000";
       let response = await fetch(
-        `${process.env.REACT_APP_BACKEND_SERVER}/api/user/login`,
+        `${backendUrl}/api/auth/login`,
         {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            username: data.username,
+            email: data.username,
             password: data.password,
           }),
-        },
+        }
       );
-      response = await response.json();
+      const resData = await response.json();
 
-      if (response.result === "Done" && response.data.active === false) {
-        setError("Your account is inactive. Please contact support.");
-      } else if (response.result === "Done") {
-        if (
-          response.data.role === "Admin" ||
-          response.data.role === "Super Admin"
-        ) {
-          localStorage.setItem("login", true);
-          localStorage.setItem("name", response.data.name);
-          localStorage.setItem("userid", response.data._id);
-          localStorage.setItem("role", response.data.role);
-          localStorage.setItem("token", response.token);
-          const incomplete = [
-            "address",
-            "state",
-            "pin",
-            "phone",
-            "name",
-            "city",
-          ].some((f) => !response.data[f]);
-          navigate(incomplete ? "/profile" : "/");
+      if (resData.success && resData.data) {
+        const user = resData.data.user;
+        const token = resData.data.token;
+
+        if (user.role === "admin" || user.role === "Admin" || user.role === "Super Admin") {
+          localStorage.setItem("login", "true");
+          localStorage.setItem("name", user.name);
+          localStorage.setItem("userid", user._id);
+          localStorage.setItem("role", user.role);
+          localStorage.setItem("token", token);
+          localStorage.setItem("user", JSON.stringify(user));
+          navigate("/");
         } else {
-          setError("You are not authorized to access this panel.");
-          localStorage.setItem("login", false);
+          setError("Access denied: You must have an Admin account to access this command console.");
+          localStorage.setItem("login", "false");
         }
       } else {
-        setError("Invalid username/email or password.");
+        setError(resData.message || "Invalid email or password.");
       }
-    } catch {
-      alert("Internal Server Error");
+    } catch (err) {
+      console.error(err);
+      setError("Unable to connect to server. Ensure backend is running on port 8000.");
     } finally {
       setLoading(false);
     }
@@ -135,11 +129,11 @@ export default function LoginPage() {
         <section className="auth-card">
           {/* Brand */}
           <Link className="auth-brand" to="/">
-            <span className="brand-icon">
-              <i className="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+            <span className="brand-icon font-monospace fw-bold text-primary" style={{ fontWeight: 800, fontSize: '0.95rem' }}>
+              CP
             </span>
             <span>
-              <strong>adminHMD</strong>
+              <strong>CareerPlacify</strong>
               <small>Sign in to your admin workspace.</small>
             </span>
           </Link>
@@ -148,7 +142,7 @@ export default function LoginPage() {
           <div className="auth-visual">
             <img
               src="/images/png/dasher-ui-bootstrap-5.jpg"
-              alt="adminHMD dashboard interface"
+              alt="CareerPlacify dashboard interface"
             />
           </div>
 

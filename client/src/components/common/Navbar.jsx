@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Menu, X, ArrowRight, Briefcase } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,12 +32,12 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/30 group-hover:scale-105 transition duration-300">
-              <Briefcase className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-700 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-md shadow-indigo-600/30 group-hover:scale-105 transition duration-300">
+              CP
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-black tracking-tight text-slate-900">
-                Talent<span className="text-indigo-600">Nestro</span>
+                Career<span className="text-indigo-600">Placify</span>
               </span>
               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                 Staffing & Skill Development

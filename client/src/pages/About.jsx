@@ -16,7 +16,7 @@ export default function About() {
   return (
     <div className="space-y-20 pb-20">
       <PageHeader
-        badge="About TalentNestro"
+        badge="About CareerPlacify"
         title={mission.title}
         description={mission.description}
       />

@@ -27,7 +27,7 @@ export default function Apply() {
     <div className="space-y-12 pb-20">
       <PageHeader
         badge="Candidate Registration"
-        title="Apply for TalentNestro Bootcamps"
+        title="Apply for CareerPlacify Bootcamps"
         description="Launch your corporate career with guaranteed skill certification and corporate placement drives."
       />
 

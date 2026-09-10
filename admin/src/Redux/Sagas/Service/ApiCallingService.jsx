@@ -1,7 +1,7 @@
 export async function createRecord(collection, payload) {
     try {
         const token = localStorage.getItem("token");
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/${collection}`, {
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/${collection}`, {
             method: "POST",
             headers: {
                 "content-type": "application/json",
@@ -19,7 +19,7 @@ export async function createRecord(collection, payload) {
 export async function createMultipartRecord(collection, payload) {
     try {
         const token = localStorage.getItem("token");
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/${collection}`, {
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/${collection}`, {
             method: "POST",
             headers: {
                 ...(token ? { "authorization": token.startsWith("Bearer ") ? token : `Bearer ${token}` } : {})
@@ -36,7 +36,7 @@ export async function createMultipartRecord(collection, payload) {
 export async function getRecord(collection) {
     try {
         const token = localStorage.getItem("token");
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/${collection}`, {
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/${collection}`, {
             method: "GET",
             headers: {
                 "content-type": "application/json",
@@ -54,7 +54,7 @@ export async function updateRecord(collection, payload) {
     try {
         const token = localStorage.getItem("token");
         const id = payload._id || payload.id;
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/${collection}/${id}`, {
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/${collection}/${id}`, {
             method: "PUT",
             headers: {
                 "content-type": "application/json",
@@ -73,7 +73,7 @@ export async function updateMultipartRecord(collection, payload) {
     try {
         const token = localStorage.getItem("token");
         const id = payload.get('_id') || payload.get('id');
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/${collection}/${id}`, {
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/${collection}/${id}`, {
             method: "PUT",
             headers: {
                 ...(token ? { "authorization": token.startsWith("Bearer ") ? token : `Bearer ${token}` } : {})
@@ -91,7 +91,7 @@ export async function deleteRecord(collection, payload) {
     try {
         const token = localStorage.getItem("token");
         const id = payload._id || payload.id;
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/${collection}/${id}`, {
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/${collection}/${id}`, {
             method: "DELETE",
             headers: {
                 "content-type": "application/json",

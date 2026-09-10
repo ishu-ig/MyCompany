@@ -36,7 +36,7 @@ export default function VerifyCertificate() {
       <PageHeader
         badge="Credential Verification"
         title="Public Certificate Ledger"
-        description="Authenticate digital skill credentials issued by TalentNestro to certified non-IT bootcamp graduates."
+        description="Authenticate digital skill credentials issued by CareerPlacify to certified non-IT bootcamp graduates."
       />
 
       <div className="max-w-3xl mx-auto px-4">
@@ -83,7 +83,7 @@ export default function VerifyCertificate() {
                     <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">
                       Verified & Authentic Credential
                     </span>
-                    <h3 className="text-xl font-black text-emerald-950 mt-1">Official TalentNestro Certification</h3>
+                    <h3 className="text-xl font-black text-emerald-950 mt-1">Official CareerPlacify Certification</h3>
                   </div>
                 </div>
 

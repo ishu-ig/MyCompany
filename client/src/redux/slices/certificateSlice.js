@@ -7,7 +7,8 @@ export const verifyCertificate = createAsyncThunk(
       const cleanCode = code ? code.trim() : '';
       if (!cleanCode) return rejectWithValue('Verification code is required');
 
-      const res = await fetch(`http://localhost:5001/api/certificates/verify/${encodeURIComponent(cleanCode)}`);
+      const backendUrl = process.env.REACT_APP_BACKEND_SERVER || 'http://localhost:8000';
+      const res = await fetch(`${backendUrl}/api/certificates/verify/${encodeURIComponent(cleanCode)}`);
       const data = await res.json();
 
       if (res.ok && data.success && data.data) {

@@ -4,6 +4,7 @@ const User = require('../models/User');
 const CandidateProfile = require('../models/CandidateProfile');
 const Notification = require('../models/Notification');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
+const { sendApplicationReceivedEmail } = require('../utils/mailer');
 
 // @desc    Candidate Bootcamp Application / Registration (Public from client)
 // @route   POST /api/applications/bootcamp
@@ -83,6 +84,13 @@ const applyBootcampCandidate = async (req, res, next) => {
       relatedId: application._id.toString(),
     });
 
+    sendApplicationReceivedEmail({
+      applicantName,
+      applicantEmail: email,
+      jobTitle: targetTrack || matchingJob?.title || 'Bootcamp Track',
+      companyName: 'CareerPlacify Academy',
+    }).catch((err) => console.error('Bootcamp email error:', err));
+
     return sendSuccess(
       res,
       'Bootcamp application submitted successfully! Our admissions counselor will schedule your initial screening round.',
@@ -161,6 +169,13 @@ const applyJob = async (req, res, next) => {
       type: 'application',
       relatedId: application._id.toString(),
     });
+
+    sendApplicationReceivedEmail({
+      applicantName: req.user.name,
+      applicantEmail: req.user.email,
+      jobTitle: job.title,
+      companyName: job.company || 'CareerPlacify Partner',
+    }).catch((err) => console.error('Job application email error:', err));
 
     return sendSuccess(res, 'Applied for job successfully', application, 201);
   } catch (error) {

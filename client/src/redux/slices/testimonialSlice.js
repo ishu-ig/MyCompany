@@ -4,7 +4,8 @@ export const fetchTestimonials = createAsyncThunk(
   'testimonials/fetchTestimonials',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await fetch('http://localhost:5001/api/testimonials');
+      const backendUrl = process.env.REACT_APP_BACKEND_SERVER || 'http://localhost:8000';
+      const res = await fetch(`${backendUrl}/api/testimonials`);
       const data = await res.json();
       if (res.ok && data.success && data.data) {
         return data.data;
@@ -23,7 +24,7 @@ const testimonialSlice = createSlice({
     items: [
       {
         id: 't-1',
-        quote: "TalentNestro eliminated our 6-week onboarding ramp-up. The BDEs we hired closed enterprise deals in their very first month.",
+        quote: "CareerPlacify eliminated our 6-week onboarding ramp-up. The BDEs we hired closed enterprise deals in their very first month.",
         author: "Rohan Verma",
         role: "VP of Sales, CloudScale Technologies",
         avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200",
@@ -41,7 +42,7 @@ const testimonialSlice = createSlice({
       },
       {
         id: 't-3',
-        quote: "Our campus placement numbers jumped significantly after TalentNestro conducted their 4-week corporate readiness drive for our final year students.",
+        quote: "Our campus placement numbers jumped significantly after CareerPlacify conducted their 4-week corporate readiness drive for our final year students.",
         author: "Dr. Arvind Menon",
         role: "Head of Training & Placements, Apex Institute",
         avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
@@ -59,7 +60,7 @@ const testimonialSlice = createSlice({
       },
       {
         id: 't-5',
-        quote: "We hired an entire 8-member recruitment operations cohort from TalentNestro. Zero bad hires and exceptional professional etiquette from day one.",
+        quote: "We hired an entire 8-member recruitment operations cohort from CareerPlacify. Zero bad hires and exceptional professional etiquette from day one.",
         author: "Meera Sen",
         role: "Director of People Ops, GrowthMatrix",
         avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200",

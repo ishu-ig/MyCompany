@@ -4,7 +4,8 @@ export const fetchCourses = createAsyncThunk(
   'courses/fetchCourses',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await fetch('http://localhost:5001/api/courses');
+      const backendUrl = process.env.REACT_APP_BACKEND_SERVER || 'http://localhost:8000';
+      const res = await fetch(`${backendUrl}/api/courses`);
       const data = await res.json();
       if (res.ok && data.success && data.data) {
         return data.data;

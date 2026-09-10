@@ -1,26 +1,26 @@
 import {
-  CREATE_BLOG_RED,
-  DELETE_BLOG_RED,
-  GET_BLOG_RED,
-  UPDATE_BLOG_RED,
+  CREATE_COURSE_RED,
+  DELETE_COURSE_RED,
+  GET_COURSE_RED,
+  UPDATE_COURSE_RED,
 } from "../Constants";
 
-export default function BlogReducer(state = [], action) {
+export default function CourseReducer(state = [], action) {
   switch (action.type) {
-    case CREATE_BLOG_RED:
+    case CREATE_COURSE_RED:
       return action.payload ? [action.payload, ...(Array.isArray(state) ? state : [])] : state;
 
-    case GET_BLOG_RED:
+    case GET_COURSE_RED:
       return Array.isArray(action.payload) ? action.payload : [];
 
-    case UPDATE_BLOG_RED:
+    case UPDATE_COURSE_RED:
       return Array.isArray(state)
         ? state.map((x) =>
             x._id === action.payload?._id ? { ...x, ...action.payload } : x
           )
         : [];
 
-    case DELETE_BLOG_RED:
+    case DELETE_COURSE_RED:
       const delId = action.payload?._id || action.payload?.id || action.payload;
       return Array.isArray(state) ? state.filter((x) => x._id !== delId) : [];
 

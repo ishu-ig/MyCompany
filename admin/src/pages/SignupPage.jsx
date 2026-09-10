@@ -166,12 +166,12 @@ export default function SignupPage() {
 
           {/* Brand */}
           <Link className="auth-brand" to="/">
-            <span className="brand-icon">
-              <i className="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+            <span className="brand-icon font-monospace fw-bold text-primary" style={{ fontWeight: 800, fontSize: '0.95rem' }}>
+              CP
             </span>
             <span>
-              <strong>adminHMD</strong>
-              <small>Create your adminHMD account.</small>
+              <strong>CareerPlacify</strong>
+              <small>Create your CareerPlacify account.</small>
             </span>
           </Link>
 
@@ -179,7 +179,7 @@ export default function SignupPage() {
           <div className="auth-visual">
             <img
               src="/images/png/dasher-ui-bootstrap-5.jpg"
-              alt="adminHMD dashboard interface"
+              alt="CareerPlacify dashboard interface"
             />
           </div>
 
@@ -192,7 +192,7 @@ export default function SignupPage() {
             <div className="mb-4">
               <p className="eyebrow mb-1">Secure Access</p>
               <h1 className="h3 mb-1">Register</h1>
-              <p className="text-muted mb-0">Create your adminHMD account.</p>
+              <p className="text-muted mb-0">Create your CareerPlacify account.</p>
             </div>
 
             {error && (

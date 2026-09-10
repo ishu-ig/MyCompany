@@ -5,6 +5,7 @@ const CollegeProfile = require('../models/CollegeProfile');
 const TrainerProfile = require('../models/TrainerProfile');
 const { generateAccessToken, generateRefreshToken } = require('../utils/jwt');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
+const { sendWelcomeEmail, sendPasswordResetEmail } = require('../utils/mailer');
 
 // @desc    Register a new user
 // @route   POST /api/auth/register
@@ -68,6 +69,11 @@ const register = async (req, res, next) => {
       isVerified: user.isVerified,
       createdAt: user.createdAt,
     };
+
+    // Asynchronously dispatch Resend welcome email
+    sendWelcomeEmail({ name: user.name, email: user.email, role: user.role }).catch(
+      (err) => console.error('Welcome email error:', err)
+    );
 
     return sendSuccess(res, 'Registration successful', {
       user: userResponse,
@@ -194,7 +200,12 @@ const forgotPassword = async (req, res, next) => {
     if (!user) {
       return sendSuccess(res, 'If an account with this email exists, a password reset link has been dispatched.');
     }
-    // Simulation / token generation for reset
+    
+    // Dispatch password reset email via Resend
+    sendPasswordResetEmail({ name: user.name, email: user.email }).catch(
+      (err) => console.error('Password reset email error:', err)
+    );
+
     return sendSuccess(res, 'Password reset instructions have been sent to your email.');
   } catch (error) {
     next(error);

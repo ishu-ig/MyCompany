@@ -10,7 +10,7 @@ export default function AdminContactUs() {
       setLoading(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/contact`,
+        `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/contact`,
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
@@ -36,7 +36,7 @@ export default function AdminContactUs() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/contact/${id}/status`,
+        `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/contact/${id}/status`,
         {
           method: "PATCH",
           headers: {

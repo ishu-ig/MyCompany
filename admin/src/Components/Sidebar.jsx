@@ -22,11 +22,11 @@ export default function Sidebar({ onLinkClick }) {
     <aside className="admin-sidebar" id="adminSidebar" aria-label="Main navigation">
       <div className="sidebar-header">
         <NavLink className="brand-mark" to="/" aria-label="Dashboard">
-          <span className="brand-icon">
-            <i className="bi bi-briefcase-fill text-indigo-600" aria-hidden="true"></i>
+          <span className="brand-icon font-monospace fw-bold text-primary" style={{ fontWeight: 800, fontSize: '0.95rem' }}>
+            CP
           </span>
           <span className="brand-copy">
-            <span className="brand-title">TalentNestro</span>
+            <span className="brand-title">CareerPlacify</span>
             <span className="brand-subtitle">Staffing Command Console</span>
           </span>
         </NavLink>
@@ -65,7 +65,7 @@ export default function Sidebar({ onLinkClick }) {
 
       <div className="sidebar-footer">
         <span className="status-dot"></span>
-        <span className="sidebar-footer-text">TalentNestro Live (Port 5001)</span>
+        <span className="sidebar-footer-text">CareerPlacify Live (Port 8000)</span>
       </div>
     </aside>
   );

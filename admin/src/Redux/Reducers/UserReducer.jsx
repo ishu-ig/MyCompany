@@ -1,26 +1,22 @@
 import {
-  CREATE_BLOG_RED,
-  DELETE_BLOG_RED,
-  GET_BLOG_RED,
-  UPDATE_BLOG_RED,
+  GET_USER_RED,
+  UPDATE_USER_RED,
+  DELETE_USER_RED,
 } from "../Constants";
 
-export default function BlogReducer(state = [], action) {
+export default function UserReducer(state = [], action) {
   switch (action.type) {
-    case CREATE_BLOG_RED:
-      return action.payload ? [action.payload, ...(Array.isArray(state) ? state : [])] : state;
-
-    case GET_BLOG_RED:
+    case GET_USER_RED:
       return Array.isArray(action.payload) ? action.payload : [];
 
-    case UPDATE_BLOG_RED:
+    case UPDATE_USER_RED:
       return Array.isArray(state)
         ? state.map((x) =>
             x._id === action.payload?._id ? { ...x, ...action.payload } : x
           )
         : [];
 
-    case DELETE_BLOG_RED:
+    case DELETE_USER_RED:
       const delId = action.payload?._id || action.payload?.id || action.payload;
       return Array.isArray(state) ? state.filter((x) => x._id !== delId) : [];
 

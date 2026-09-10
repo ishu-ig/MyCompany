@@ -2,6 +2,10 @@ const Interview = require('../models/Interview');
 const JobApplication = require('../models/JobApplication');
 const Notification = require('../models/Notification');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
+const { sendInterviewScheduledEmail } = require('../utils/mailer');
+
+const User = require('../models/User');
+const Job = require('../models/Job');
 
 // @desc    Schedule an interview
 // @route   POST /api/interviews
@@ -12,7 +16,11 @@ const scheduleInterview = async (req, res, next) => {
       applicationId,
       jobId,
       candidateId,
+      candidateName,
+      candidateEmail,
+      jobTitle,
       employerId,
+      employerName,
       interviewType = 'HR Round',
       interviewMode = 'Online (Video)',
       scheduledDate,
@@ -22,23 +30,50 @@ const scheduleInterview = async (req, res, next) => {
       interviewerName,
     } = req.body;
 
-    if (!jobId || !candidateId || !scheduledDate || !scheduledTime) {
-      return sendError(res, 'Job, Candidate, Scheduled Date, and Scheduled Time are required', 400);
+    let targetCandidateId = candidateId;
+    let targetJobId = jobId;
+
+    if (!targetCandidateId && candidateEmail) {
+      let user = await User.findOne({ email: candidateEmail });
+      if (!user) {
+        user = await User.create({
+          name: candidateName || 'Interview Candidate',
+          email: candidateEmail,
+          password: 'Password123!',
+          role: 'candidate',
+        });
+      }
+      targetCandidateId = user._id;
+    } else if (!targetCandidateId) {
+      const defaultUser = await User.findOne({ role: 'candidate' });
+      targetCandidateId = defaultUser ? defaultUser._id : req.user._id;
     }
+
+    if (!targetJobId && jobTitle) {
+      const job = await Job.findOne({ title: { $regex: jobTitle, $options: 'i' } });
+      if (job) targetJobId = job._id;
+    }
+    if (!targetJobId) {
+      const firstJob = await Job.findOne();
+      if (firstJob) targetJobId = firstJob._id;
+    }
+
+    const finalDate = scheduledDate || new Date();
+    const finalTime = scheduledTime || '11:00 AM';
 
     const interview = await Interview.create({
       application: applicationId,
-      job: jobId,
-      candidate: candidateId,
+      job: targetJobId,
+      candidate: targetCandidateId,
       employer: employerId || req.user._id,
       recruiter: req.user.role === 'recruiter' ? req.user._id : undefined,
       interviewType,
       interviewMode,
-      scheduledDate,
-      scheduledTime,
+      scheduledDate: finalDate,
+      scheduledTime: finalTime,
       meetingLink: meetingLink || 'https://meet.google.com/xyz-placement-interview',
       location: location || 'Online Video Link',
-      interviewerName: interviewerName || req.user.name,
+      interviewerName: interviewerName || employerName || req.user.name,
       status: 'scheduled',
     });
 
@@ -51,13 +86,30 @@ const scheduleInterview = async (req, res, next) => {
     }
 
     // Send notification to candidate
-    await Notification.create({
-      user: candidateId,
-      title: 'Interview Scheduled! 📅',
-      message: `You have an interview scheduled for ${scheduledDate} at ${scheduledTime} (${interviewType}).`,
-      type: 'interview',
-      relatedId: interview._id.toString(),
-    });
+    if (targetCandidateId) {
+      const candidateUser = await User.findById(targetCandidateId);
+      const targetJob = targetJobId ? await Job.findById(targetJobId) : null;
+
+      await Notification.create({
+        user: targetCandidateId,
+        title: 'Interview Scheduled! 📅',
+        message: `You have an interview scheduled for ${finalDate} at ${finalTime} (${interviewType}).`,
+        type: 'interview',
+        relatedId: interview._id.toString(),
+      });
+
+      if (candidateUser && candidateUser.email) {
+        sendInterviewScheduledEmail({
+          candidateName: candidateUser.name,
+          candidateEmail: candidateUser.email,
+          jobTitle: targetJob?.title || jobTitle || 'Position',
+          interviewType,
+          scheduledDate: finalDate,
+          scheduledTime: finalTime,
+          meetingLink: interview.meetingLink,
+        }).catch((err) => console.error('Interview schedule email error:', err));
+      }
+    }
 
     return sendSuccess(res, 'Interview scheduled successfully', interview, 201);
   } catch (error) {

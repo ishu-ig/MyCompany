@@ -77,7 +77,7 @@ const features = [
 
 const faqs = [
   {
-    q: "How does the TalentNestro Train-and-Hire model work?",
+    q: "How does the CareerPlacify Train-and-Hire model work?",
     a: "We partner with corporations to understand their exact hiring criteria and toolsets. We then screen high-potential candidates, train them through real-world business simulations and live drills, and deploy them directly to hiring partners with zero onboarding delay."
   },
   {
@@ -86,7 +86,7 @@ const faqs = [
   },
   {
     q: "How are candidate credentials and certificates verified?",
-    a: "Every certificate issued by TalentNestro includes a unique alphanumeric Certificate ID and a verifiable QR code. Anyone can enter the ID on our Verify Certificate page to review authentic student details, batch, score, and completion status."
+    a: "Every certificate issued by CareerPlacify includes a unique alphanumeric Certificate ID and a verifiable QR code. Anyone can enter the ID on our Verify Certificate page to review authentic student details, batch, score, and completion status."
   },
   {
     q: "What is the cost structure for corporate hiring partners?",
@@ -157,7 +157,7 @@ export default function Home() {
               data-aos="fade-up"
               data-aos-delay="100"
             >
-              TalentNestro eliminates corporate hiring delays and candidate unemployability through our proven <strong className="text-slate-800 font-bold">Train-and-Hire ecosystem</strong> — delivering pre-skilled, productive talent on day one.
+              CareerPlacify eliminates corporate hiring delays and candidate unemployability through our proven <strong className="text-slate-800 font-bold">Train-and-Hire ecosystem</strong> — delivering pre-skilled, productive talent on day one.
             </p>
 
             {/* Hero CTAs */}
@@ -249,7 +249,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3.5 py-1 rounded-full border border-indigo-100">
-            Why TalentNestro
+            Why CareerPlacify
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
             Engineered Features for Modern Hiring & Skill Building
@@ -502,7 +502,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="flex justify-between text-xs font-bold mb-1 text-slate-700">
-                      <span>TalentNestro Train-and-Hire</span>
+                      <span>CareerPlacify Train-and-Hire</span>
                       <span className="text-emerald-600 font-black">14 Days (Zero Ramp-Up)</span>
                     </div>
                     <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
@@ -646,7 +646,7 @@ export default function Home() {
                 Authentic, Tamper-Proof Skill Credentials
               </h2>
               <p className="text-xs sm:text-sm text-indigo-100 leading-relaxed max-w-xl">
-                Every TalentNestro certificate is registered on a cryptographically secured database. Employers can authenticate candidate completion status, track scores, and graduation dates instantly.
+                Every CareerPlacify certificate is registered on a cryptographically secured database. Employers can authenticate candidate completion status, track scores, and graduation dates instantly.
               </p>
             </div>
 
@@ -772,7 +772,7 @@ export default function Home() {
               Ready to Upgrade Your Hiring Pipeline & Accelerate Your Career?
             </h2>
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto">
-              Partner with TalentNestro to deploy custom-trained cohorts or join our upcoming intensive corporate readiness bootcamps.
+              Partner with CareerPlacify to deploy custom-trained cohorts or join our upcoming intensive corporate readiness bootcamps.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <Link

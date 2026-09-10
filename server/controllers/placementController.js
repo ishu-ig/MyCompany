@@ -3,27 +3,73 @@ const JobApplication = require('../models/JobApplication');
 const Notification = require('../models/Notification');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
 
+const User = require('../models/User');
+const Job = require('../models/Job');
+
 // @desc    Record a new placement / offer letter
 // @route   POST /api/placements
 // @access  Private (Employer / Recruiter / Admin)
 const createPlacement = async (req, res, next) => {
   try {
-    const { candidateId, jobId, employerId, designation, salary, joiningDate, offerLetterUrl, applicationId } =
-      req.body;
-
-    if (!candidateId || !jobId || !designation || !salary || !joiningDate) {
-      return sendError(res, 'Candidate, Job, Designation, Salary, and Joining Date are required', 400);
-    }
-
-    const placement = await Placement.create({
-      candidate: candidateId,
-      job: jobId,
-      employer: employerId || req.user._id,
-      recruiter: req.user.role === 'recruiter' ? req.user._id : undefined,
+    const {
+      candidateId,
+      jobId,
+      employerId,
+      candidateName,
+      candidateEmail,
+      jobTitle,
+      companyName,
       designation,
       salary,
+      offeredSalary,
       joiningDate,
-      offerLetterUrl: offerLetterUrl || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=600',
+      offerLetterUrl,
+      applicationId,
+    } = req.body;
+
+    let targetCandidateId = candidateId;
+    let targetJobId = jobId;
+
+    if (!targetCandidateId && candidateEmail) {
+      let user = await User.findOne({ email: candidateEmail });
+      if (!user) {
+        user = await User.create({
+          name: candidateName || 'Placed Candidate',
+          email: candidateEmail,
+          password: 'Password123!',
+          role: 'candidate',
+        });
+      }
+      targetCandidateId = user._id;
+    } else if (!targetCandidateId) {
+      const defaultUser = await User.findOne({ role: 'candidate' });
+      targetCandidateId = defaultUser ? defaultUser._id : req.user._id;
+    }
+
+    if (!targetJobId && jobTitle) {
+      const job = await Job.findOne({ title: { $regex: jobTitle, $options: 'i' } });
+      if (job) targetJobId = job._id;
+    }
+    if (!targetJobId) {
+      const firstJob = await Job.findOne();
+      if (firstJob) targetJobId = firstJob._id;
+    }
+
+    const finalDesignation = designation || jobTitle || 'Business Development Executive';
+    const finalSalary = Number(salary || offeredSalary || 500000);
+    const finalJoiningDate = joiningDate || new Date();
+
+    const placement = await Placement.create({
+      candidate: targetCandidateId,
+      job: targetJobId,
+      employer: employerId || req.user._id,
+      recruiter: req.user.role === 'recruiter' ? req.user._id : undefined,
+      designation: finalDesignation,
+      salary: finalSalary,
+      joiningDate: finalJoiningDate,
+      offerLetterUrl:
+        offerLetterUrl ||
+        'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=600',
       status: 'offer_received',
     });
 
@@ -34,14 +80,15 @@ const createPlacement = async (req, res, next) => {
       });
     }
 
-    // Send high-priority notification to candidate
-    await Notification.create({
-      user: candidateId,
-      title: '🎉 Placement Offer Received!',
-      message: `Congratulations! You have received a placement offer for ${designation} at CTC ₹${salary.toLocaleString('en-IN')}.`,
-      type: 'placement',
-      relatedId: placement._id.toString(),
-    });
+    if (targetCandidateId) {
+      await Notification.create({
+        user: targetCandidateId,
+        title: '🎉 Placement Offer Received!',
+        message: `Congratulations! You have received a placement offer for ${finalDesignation} at CTC ₹${finalSalary.toLocaleString('en-IN')}.`,
+        type: 'placement',
+        relatedId: placement._id.toString(),
+      });
+    }
 
     return sendSuccess(res, 'Placement recorded successfully', placement, 201);
   } catch (error) {

@@ -10,7 +10,7 @@ export default function AdminApplication() {
       setLoading(true);
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/applications`,
+        `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/applications`,
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
@@ -36,7 +36,7 @@ export default function AdminApplication() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:5001"}/api/applications/${id}/status`,
+        `${process.env.REACT_APP_BACKEND_SERVER || "http://localhost:8000"}/api/applications/${id}/status`,
         {
           method: "PATCH",
           headers: {

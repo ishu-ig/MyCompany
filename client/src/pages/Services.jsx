@@ -25,7 +25,7 @@ export default function Services() {
       <PageHeader
         badge="What We Offer"
         title="Comprehensive Staffing & Skill Architecture"
-        description="Explore how TalentNestro connects employers, higher education institutions, and aspiring candidates."
+        description="Explore how CareerPlacify connects employers, higher education institutions, and aspiring candidates."
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">

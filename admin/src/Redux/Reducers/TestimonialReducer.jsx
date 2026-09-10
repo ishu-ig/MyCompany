@@ -1,26 +1,30 @@
-import { CREATE_TESTIMONIAL_RED, DELETE_TESTIMONIAL_RED, GET_TESTIMONIAL_RED, UPDATE_TESTIMONIAL_RED } from "../Constants"
-export default function TestimonialReducer(state=[], action) {
-    switch (action.type) {
-        case CREATE_TESTIMONIAL_RED:
-            let newState = [...state]
-            newState.unshift(action.payload)
-            return newState
+import {
+  CREATE_TESTIMONIAL_RED,
+  DELETE_TESTIMONIAL_RED,
+  GET_TESTIMONIAL_RED,
+  UPDATE_TESTIMONIAL_RED,
+} from "../Constants";
 
-        case GET_TESTIMONIAL_RED:
-            return action.payload
+export default function TestimonialReducer(state = [], action) {
+  switch (action.type) {
+    case CREATE_TESTIMONIAL_RED:
+      return action.payload ? [action.payload, ...(Array.isArray(state) ? state : [])] : state;
 
-        case UPDATE_TESTIMONIAL_RED:
-            let index = state.findIndex(x => x._id === action.payload._id)
-            state[index].name = action.payload.name
-            state[index].pic = action.payload.pic
-            state[index].active = action.payload.active
-            state[index].message = action.payload.message
-            return state
+    case GET_TESTIMONIAL_RED:
+      return Array.isArray(action.payload) ? action.payload : [];
 
-        case DELETE_TESTIMONIAL_RED:
-            return state.filter(x => x._id !== action.payload._id)
+    case UPDATE_TESTIMONIAL_RED:
+      return Array.isArray(state)
+        ? state.map((x) =>
+            x._id === action.payload?._id ? { ...x, ...action.payload } : x
+          )
+        : [];
 
-        default:
-            return state
-    }
-}   
+    case DELETE_TESTIMONIAL_RED:
+      const delId = action.payload?._id || action.payload?.id || action.payload;
+      return Array.isArray(state) ? state.filter((x) => x._id !== delId) : [];
+
+    default:
+      return state;
+  }
+}

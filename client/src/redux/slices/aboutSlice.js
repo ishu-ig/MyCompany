@@ -5,8 +5,8 @@ const initialState = {
     name: 'Shah Raza',
     role: 'Founder & CEO',
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400',
-    quote: '"Traditional staffing hires on potential; TalentNestro deploys on proven readiness."',
-    bio: 'Every year, thousands of talented graduates struggle to find the right corporate opportunities, while companies spend months dealing with ramp-up overhead. At TalentNestro, our Train-and-Hire model bridges this gap through practical business simulation bootcamps, structured mentorship, and guaranteed placement execution.',
+    quote: '"Traditional staffing hires on potential; CareerPlacify deploys on proven readiness."',
+    bio: 'Every year, thousands of talented graduates struggle to find the right corporate opportunities, while companies spend months dealing with ramp-up overhead. At CareerPlacify, our Train-and-Hire model bridges this gap through practical business simulation bootcamps, structured mentorship, and guaranteed placement execution.',
   },
   mission: {
     title: 'Transforming Non-IT Talent Acquisition',

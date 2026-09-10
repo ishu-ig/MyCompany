@@ -1,5 +1,6 @@
 const ContactEnquiry = require('../models/ContactEnquiry');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
+const { sendContactInquiryConfirmation } = require('../utils/mailer');
 
 // @desc    Submit a contact enquiry
 // @route   POST /api/contact
@@ -25,6 +26,11 @@ const submitContact = async (req, res, next) => {
       subject: determinedSubject,
       message,
     });
+
+    // Asynchronously dispatch Resend email confirmation
+    sendContactInquiryConfirmation({ name, email, service: service || 'Train-and-Hire Consultation' }).catch(
+      (err) => console.error('Contact confirmation email error:', err)
+    );
 
     return sendSuccess(
       res,
