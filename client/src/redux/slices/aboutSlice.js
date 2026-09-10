@@ -36,10 +36,10 @@ const initialState = {
     },
   ],
   metrics: [
-    { label: 'Graduates Deployed', value: '500+' },
-    { label: 'Corporate Partners', value: '100+' },
-    { label: 'Placement Rate', value: '95%' },
-    { label: 'Partner Colleges', value: '25+' },
+    { label: 'Practical Role Training', value: '100%' },
+    { label: 'Fast-Track Readiness', value: '14 Days' },
+    { label: 'Dedicated Mentorship', value: '1:1' },
+    { label: 'Verifiable Credentials', value: '100%' },
   ],
 };
 

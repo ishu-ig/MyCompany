@@ -24,10 +24,10 @@ import { setSearchCode } from '../redux/slices/certificateSlice';
 import { setSelectedTrack } from '../redux/slices/courseSlice';
 
 const stats = [
-  { value: '500+', label: 'Professionals Trained & Placed', icon: Users, change: '+94% placement rate' },
-  { value: '100+', label: 'Corporate Hiring Partners', icon: Building2, change: 'Tier-1 & high-growth startups' },
-  { value: '14 Days', label: 'Average Time-to-Deploy', icon: Zap, change: 'vs. 60+ days industry average' },
-  { value: '100%', label: 'Verifiable Digital Credentials', icon: Award, change: 'Instant cryptographic validation' },
+  { value: '100%', label: 'Practical Role Simulations', icon: BookOpen, change: 'Live Corporate Drills' },
+  { value: '1:1', label: 'Dedicated Career Mentorship', icon: Users, change: 'Personalized Coaching' },
+  { value: '14 Days', label: 'Fast-Track Time-to-Deploy', icon: Zap, change: 'Agile & Day-1 Ready' },
+  { value: '100%', label: 'Verifiable Digital Credentials', icon: Award, change: 'Instant QR Validation' },
 ];
 
 const features = [
@@ -93,8 +93,8 @@ const faqs = [
     a: "We offer flexible models tailored to enterprise needs, including success-based placement fees, custom cohort sponsorships, and campus drive execution. Reach out via our Contact page for customized enterprise pricing."
   },
   {
-    q: "Are job placements guaranteed upon bootcamp completion?",
-    a: "Candidates who successfully meet all attendance milestones, clear weekly assessments, and pass the final capstone evaluation receive guaranteed interview opportunities with our pool of 100+ corporate hiring partners."
+    q: "Are job placements supported upon bootcamp completion?",
+    a: "Candidates who successfully meet all attendance milestones, clear weekly assessments, and pass the final capstone evaluation receive direct interview opportunities with our network of hiring partner companies."
   }
 ];
 
@@ -195,9 +195,9 @@ export default function Home() {
               data-aos-delay="300"
             >
               {[
-                { label: 'Zero Ramp-Up Cost', sub: 'Day-1 Productive' },
-                { label: '95% Placement Rate', sub: 'Guaranteed Drives' },
-                { label: '100+ Hiring Partners', sub: 'Verified Companies' },
+                { label: 'Zero Ramp-Up Delay', sub: 'Day-1 Job Ready' },
+                { label: '1:1 Coaching', sub: 'Personalized Guidance' },
+                { label: 'Direct Hiring Pipeline', sub: 'Curated Opportunities' },
                 { label: 'Tamper-Proof QR', sub: 'Instant Credential Lookup' },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2 p-3 bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-xs">
